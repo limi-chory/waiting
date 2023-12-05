@@ -4,6 +4,7 @@ import * as nodemailer from 'nodemailer'
 import { Repository } from 'typeorm'
 
 import { Verification } from '@entity'
+
 import { VERIFICATION_EMAIL_HTML, VERIFICATION_EMAIL_SUBJECT } from './consts'
 
 @Injectable()

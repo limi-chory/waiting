@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { WaitingModule, AuthModule, EmailModule, UserModule } from '@module'
+import { WaitingModule, AuthModule, EmailModule, UserModule, MeModule } from '@module'
 import { Waiting, Verification, User } from '@entity'
 
 @Module({
@@ -20,6 +20,7 @@ import { Waiting, Verification, User } from '@entity'
     AuthModule,
     EmailModule,
     UserModule,
+    MeModule,
   ],
   controllers: [],
   providers: [],

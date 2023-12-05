@@ -21,7 +21,8 @@
       "@module": ["./src/modules"],
       "@entity": ["./src/entities"],
       "@dto": ["./src/dtos"],
-      "@decorators": ["./src/decorators"]
+      "@decorators": ["./src/decorators"],
+      "@util": ["./src/utils"]
     }
   }
 }

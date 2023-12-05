@@ -1,6 +1,19 @@
-import styles from '../styles/Home.module.css'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+
+import styles from '@style/Home.module.css'
+
+import { useLoginContext } from '@context'
+import { ROUTES } from '@util'
 
 const Home: React.FC = () => {
+  const { isLoggedIn } = useLoginContext()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isLoggedIn) router.push(ROUTES.login)
+  }, [isLoggedIn, router])
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>

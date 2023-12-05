@@ -1,9 +1,9 @@
-// pages/signup.tsx
-
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import styles from '../styles/signup.module.css'
 import axios from 'axios'
+
+import styles from '@style/signup.module.css'
+
 import { API_URL } from '../config'
 
 const Signup: React.FC = () => {

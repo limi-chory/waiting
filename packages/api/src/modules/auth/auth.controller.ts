@@ -1,10 +1,12 @@
 import { Controller, Get, Param, Post, Request, UnauthorizedException, UseGuards } from '@nestjs/common'
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
 
+import { LoginDto } from '@dto'
+
 import { EmailService } from '../email/email.service'
 import { AuthService } from './auth.service'
 import { LocalAuthGuard } from './local.auth.guard'
-import { LoginDto } from '@dto'
+import { TOKEN_EXPIRES_AFTER } from './consts'
 
 @ApiTags('auth')
 @Controller('auth')
@@ -28,9 +30,10 @@ export class AuthController {
   @ApiResponse({ status: 401, description: '로그인 실패' })
   async login(@Request() req) {
     if (!req.user) throw new UnauthorizedException()
+    const now = new Date()
+    const expires = new Date(now.getTime() + TOKEN_EXPIRES_AFTER)
+    const token = await this.authService.createToken(req.user.id)
 
-    return {
-      access_token: await this.authService.createToken(req.user.id),
-    }
+    return { token, expires }
   }
 }

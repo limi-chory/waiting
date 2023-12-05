@@ -1,4 +1,3 @@
-import { InternalServerErrorException } from '@nestjs/common'
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm'
 import { IsEmail, Length } from 'class-validator'
 import * as bcrypt from 'bcrypt'
@@ -31,7 +30,7 @@ export class User extends Core {
 
   @BeforeInsert()
   setGroup() {
-    const domain = this.email.split('@')[1].split('.')[0]
+    const [domain] = this.email.split('@')[1].split('.')
     let group = UserGroup.NOT_BELONG
 
     if (domain in EMAIL_GROUP_MAP) group = EMAIL_GROUP_MAP[domain]

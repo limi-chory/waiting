@@ -1,27 +1,29 @@
-// pages/login.tsx
-
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import styles from '../styles/login.module.css'
-import { API_URL } from '../config'
-import axiosInstance, { setAuthorization } from '../axiosInstance'
-import { setToken } from '../authorizationToken'
+
+import styles from '@style/login.module.css'
+
+import { useLoginContext } from '@context'
+import { useAxios } from '@hook'
+import { ROUTES } from '@util'
 
 const Login: React.FC = () => {
   const router = useRouter()
+  const { isLoggedIn, setLoginTokenCookie } = useLoginContext()
+  const { axios } = useAxios()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [rememberMe, setRememberMe] = useState(false)
+
+  if (isLoggedIn) router.back()
 
   const handleLogin = async () => {
     try {
-      const response = await axiosInstance.post('/auth/login', { email, password })
-      const token = response?.data?.access_token || null
+      const response = await axios.post('/auth/login', { email, password })
+      const { token, expires } = response?.data || {}
 
       if (token) {
-        setAuthorization(token)
-        setToken(token)
-        router.push('/dashboard')
+        setLoginTokenCookie?.(token, new Date(expires))
+        router.push(ROUTES.home)
       }
     } catch (e) {
       console.error(e)
@@ -39,12 +41,6 @@ const Login: React.FC = () => {
         <div className={styles['form-group']}>
           <label htmlFor="password">비밀번호</label>
           <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </div>
-        <div className={styles['remember-checkbox']}>
-          <label>
-            <input type="checkbox" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} />
-            로그인 정보 기억하기
-          </label>
         </div>
         <div className={styles['form-group']}>
           <button type="button" className={styles['login-button']} onClick={handleLogin}>

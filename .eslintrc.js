@@ -25,7 +25,7 @@ module.exports = {
     'plugin:import/recommended',
   ],
   rules: {
-    'no-console': process.env.DEPLOY_ENV === 'prod' ? 'error' : 'warn',
+    'no-console': ['error', { allow: ['error'] }],
     'prettier/prettier': 'off',
     semi: ['error', 'never'],
     'import/no-extraneous-dependencies': 'off',
@@ -68,12 +68,17 @@ module.exports = {
     ],
     camelcase: 'warn',
     'import/order': [
-      2,
+      'error',
       {
         groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index']],
         pathGroups: [
           {
-            pattern: ['@module', '@dto', '@entity', '@decorator'],
+            pattern: '@style/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
+            pattern: '@*',
             group: 'external',
             position: 'after',
           },
@@ -135,11 +140,13 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-unused-vars': [
-      'warn',
+      'error',
       {
         vars: 'all',
         args: 'none',
         ignoreRestSiblings: false,
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_',
       },
     ],
     '@typescript-eslint/member-delimiter-style': 'off',

@@ -28,7 +28,7 @@ importers:
       '@typescript-eslint/parser': ^5.0.0
       bcrypt: ^5.1.1
       class-validator: ^0.14.0
-      eslint: ^8.0.1
+      eslint: ^8.54.0
       eslint-config-prettier: ^8.3.0
       eslint-plugin-prettier: ^4.0.0
       express: ^4.0.0
@@ -113,19 +113,24 @@ importers:
       eslint-config-next: 14.0.3
       next: 14.0.3
       react: 18.2.0
+      react-cookie: ^6.1.1
       react-dom: 18.2.0
       typescript: 5.3.2
+      universal-cookie: ^6.1.1
     dependencies:
       '@types/node': 20.10.0
       '@types/react': 18.2.38
       '@types/react-dom': 18.2.17
       axios: 1.6.2
-      eslint: 8.54.0
       eslint-config-next: 14.0.3_t4y562kuozn2x6kqiutrjmhi5a
       next: 14.0.3_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
+      react-cookie: 6.1.1_react@18.2.0
       react-dom: 18.2.0_react@18.2.0
       typescript: 5.3.2
+      universal-cookie: 6.1.1
+    devDependencies:
+      eslint: 8.54.0
 
 packages:
 
@@ -1331,6 +1336,10 @@ packages:
       '@types/node': 16.18.62
     dev: true
 
+  /@types/cookie/0.5.4:
+    resolution: {integrity: sha512-7z/eR6O859gyWIAjuvBWFzNURmf2oPBmJlfVWkwehU5nzIyjwBsTh7WMmEEV4JFnHuQ3ex4oyTvfKzcyJVDBNA==}
+    dev: false
+
   /@types/cookiejar/2.1.4:
     resolution: {integrity: sha512-b698BLJ6kPVd6uhHsY7wlebZdrWPXYied883PDSzpJZYOP97EOn/oGdLCH3jJf157srkFReIZY5v0H1s8Dozrg==}
     dev: true
@@ -1373,6 +1382,13 @@ packages:
     dependencies:
       '@types/node': 16.18.62
     dev: true
+
+  /@types/hoist-non-react-statics/3.3.5:
+    resolution: {integrity: sha512-SbcrWzkKBw2cdwRTwQAswfpB9g9LJWfjtUeW/jvNwbhC8cpmmNYVePa+ncbUe0rGTQ7G3Ff6mYUN2VMfLVr+Sg==}
+    dependencies:
+      '@types/react': 18.2.38
+      hoist-non-react-statics: 3.3.2
+    dev: false
 
   /@types/http-errors/2.0.4:
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
@@ -3740,6 +3756,12 @@ packages:
     resolution: {integrity: sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==}
     dev: false
 
+  /hoist-non-react-statics/3.3.2:
+    resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
+    dependencies:
+      react-is: 16.13.1
+    dev: false
+
   /html-escaper/2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
     dev: true
@@ -5619,6 +5641,17 @@ packages:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
 
+  /react-cookie/6.1.1_react@18.2.0:
+    resolution: {integrity: sha512-fuFRpf8LH6SfmVMowDUIRywJF5jAUDUWrm0EI5VdXfTl5bPcJ7B0zWbuYpT0Tvikx7Gs18MlvAT+P+744dUz2g==}
+    peerDependencies:
+      react: '>= 16.3.0'
+    dependencies:
+      '@types/hoist-non-react-statics': 3.3.5
+      hoist-non-react-statics: 3.3.2
+      react: 18.2.0
+      universal-cookie: 6.1.1
+    dev: false
+
   /react-dom/18.2.0_react@18.2.0:
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
     peerDependencies:
@@ -6679,6 +6712,13 @@ packages:
 
   /undici-types/5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+
+  /universal-cookie/6.1.1:
+    resolution: {integrity: sha512-33S9x3CpdUnnjwTNs2Fgc41WGve2tdLtvaK2kPSbZRc5pGpz2vQFbRWMxlATsxNNe/Cy8SzmnmbuBM85jpZPtA==}
+    dependencies:
+      '@types/cookie': 0.5.4
+      cookie: 0.5.0
+    dev: false
 
   /universalify/2.0.1:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}

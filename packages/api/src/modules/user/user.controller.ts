@@ -1,11 +1,12 @@
 import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
-import { UserService } from './user.service'
 
 import { CreateUserDto, UpdateUserDto, UserResponseDto } from '@dto'
 import { User } from '@entity'
 import { AuthUser } from '@decorators'
+
 import { JwtAuthGuard } from '../auth/jwt.auth.guard'
+import { UserService } from './user.service'
 
 @ApiTags('users')
 @Controller('users')

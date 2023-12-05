@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToOne } from 'typeorm'
+import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm'
 import { IsEmail } from 'class-validator'
 
 import { Core } from '@entity'
