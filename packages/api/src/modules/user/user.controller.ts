@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common'
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 import { CreateUserDto, UpdateUserDto, UserResponseDto } from '@dto'
 import { User, UserTeam } from '@entity'
-import { AuthUser } from '@decorators'
+import { ApiOperation, AuthUser } from '@decorators'
 
 import { JwtAuthGuard } from '../auth/jwt.auth.guard'
 import { UserService } from './user.service'
@@ -28,6 +28,7 @@ export class UserController {
   @Patch()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({ description: '회원정보 수정' })
   @ApiBody({ type: UpdateUserDto, description: '회원 수정 정보 입력' })
   async updateUser(@AuthUser() user: User, @Body() updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
     return this.userService.updateUser(user.id, updateUserDto)
@@ -36,6 +37,7 @@ export class UserController {
   @Get('/teammates/:team')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({ description: '팀원 조회' })
   @ApiParam({
     name: 'team',
     enum: UserTeam,
@@ -49,6 +51,7 @@ export class UserController {
   @Post('/teams/:team')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({ description: '팀 가입' })
   @ApiParam({
     name: 'team',
     enum: UserTeam,
@@ -62,6 +65,7 @@ export class UserController {
   @Delete('/teams/:team')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
+  @ApiOperation({ description: '팀 탈퇴' })
   @ApiParam({
     name: 'team',
     enum: UserTeam,

@@ -6,7 +6,7 @@ import { AppModule } from './app.module'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
-  const config = new DocumentBuilder().setTitle('My API').setDescription('The description of my API').setVersion('1.0').addBearerAuth().build()
+  const config = new DocumentBuilder().setTitle('Waiting API').setDescription('Rest API for Waiting').setVersion('1.0').addBearerAuth().build()
 
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api-doc', app, document)

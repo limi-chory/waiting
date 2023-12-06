@@ -10,7 +10,7 @@ import { ROUTES } from '@util'
 const Login: React.FC = () => {
   const router = useRouter()
   const { isLoggedIn, setLoginTokenCookie } = useLoginContext()
-  const { axios } = useAxios()
+  const { api } = useAxios()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -18,8 +18,8 @@ const Login: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('/auth/login', { email, password })
-      const { token, expires } = response?.data || {}
+      const response = await api.auth.login({ email, password })
+      const { token, expires } = response?.data as any || {}
 
       if (token) {
         setLoginTokenCookie?.(token, new Date(expires))

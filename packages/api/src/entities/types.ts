@@ -15,6 +15,11 @@ export enum UserTeam {
   B = 'B team',
 }
 
+export enum UserRole {
+  REPORTER = 'REPORTER',
+  RECIPIENTS = 'RECIPIENTS',
+}
+
 export const GroupTeamMap = {
   [UserGroup.NOT_BELONG]: [],
   [UserGroup.NAVER]: [UserTeam.G_PLACE_SERVICE_DEV],
