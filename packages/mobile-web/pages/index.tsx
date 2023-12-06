@@ -17,12 +17,19 @@ const Home: React.FC = () => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.title}>로그인</h1>
+        <div className={styles.logo}>Waiting</div>
+        <div className={styles.settings}>⚙️</div>
       </header>
-
-      <div>hi</div>
-
-      <footer className={styles.footer}>안녕하세요</footer>
+      <div className={styles.listContainer}>
+        <div className={styles.list}>
+          {/* 리스트 아이템들을 여기에 추가 */}
+          {Array.from({ length: 20 }, (_, index) => (
+            <div key={index} className={styles.listItem}>
+              Item {index + 1}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

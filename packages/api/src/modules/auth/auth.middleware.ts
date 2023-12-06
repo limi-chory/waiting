@@ -15,7 +15,7 @@ export class AuthMiddleware implements NestMiddleware {
       try {
         const decoded = await this.authService.verifyToken(token.toString())
         if (decoded) {
-          const user = await this.userService.findUserById(decoded.id)
+          const user = await this.userService.getUserById(decoded.id)
           Object.assign(req, { user })
         }
       } catch (e) {

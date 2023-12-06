@@ -12,7 +12,7 @@ export class AuthService {
 
   async validateUser({ email, password }: LoginDto) {
     try {
-      const user = await this.userService.findUserByEmail(email)
+      const user = await this.userService.getUserByEmail(email)
       if (!user) throw new NotFoundException()
 
       const checkPassWord = await user.checkPassword(password)

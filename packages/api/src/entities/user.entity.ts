@@ -2,7 +2,7 @@ import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm'
 import { IsEmail, Length } from 'class-validator'
 import * as bcrypt from 'bcrypt'
 
-import { Core, EMAIL_GROUP_MAP, UserGroup, UserType } from '@entity'
+import { Core, EMAIL_GROUP_MAP, UserGroup, UserTeam, UserType } from '@entity'
 
 const DEFAULT_SALT_ROUND = 10
 
@@ -21,6 +21,9 @@ export class User extends Core {
 
   @Column({ type: 'enum', enum: UserGroup, default: UserGroup.NOT_BELONG })
   group: UserGroup
+
+  @Column({ type: 'simple-array', default: null })
+  teams: UserTeam[]
 
   @Column({ nullable: true })
   image?: string
