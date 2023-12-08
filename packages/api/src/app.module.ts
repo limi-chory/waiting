@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { WaitingModule, AuthModule, EmailModule, UserModule, MeModule } from '@module'
+import { Modules } from '@module'
 import { Waiting, Verification, User } from '@entity'
 
 @Module({
@@ -16,11 +16,7 @@ import { Waiting, Verification, User } from '@entity'
       synchronize: true,
       entities: [Waiting, Verification, User],
     }),
-    WaitingModule,
-    AuthModule,
-    EmailModule,
-    UserModule,
-    MeModule,
+    ...Modules,
   ],
   controllers: [],
   providers: [],

@@ -35,7 +35,6 @@ const Home: React.FC = () => {
       if (data?.me) {
         setMe(data.me)
         setCallMeCompleted(true)
-        console.log(me)
       }
     } catch (e) {
       console.error(e)
@@ -49,7 +48,7 @@ const Home: React.FC = () => {
   return (
     <div className={styles.container}>
       <ModalPopup isOpen={isSettingOpen} onClose={() => setIsSettingOpen(false)}>
-        <MySettings me={me} />
+        <MySettings me={me || null} />
       </ModalPopup>
       <header className={styles.header}>
         <div className={styles.logo}>Waiting</div>

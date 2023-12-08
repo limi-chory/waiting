@@ -43,6 +43,7 @@ export enum UserRole {
 }
 
 export interface UserResponseDto {
+  id: number
   email: string
   name: string
   group: UserGroup
@@ -262,63 +263,6 @@ export class HttpClient<SecurityDataType = unknown> {
  * Rest API for Waiting
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  waiting = {
-    /**
-     * @description Waiting 리스트 조회
-     *
-     * @tags waiting
-     * @name ReadWaitings
-     * @request GET:/waiting/{id}
-     */
-    readWaitings: (id: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/waiting/${id}`,
-        method: 'GET',
-        ...params,
-      }),
-
-    /**
-     * @description Waiting 생성
-     *
-     * @tags waiting
-     * @name CreateWaiting
-     * @request POST:/waiting/{id}
-     */
-    createWaiting: (id: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/waiting/${id}`,
-        method: 'POST',
-        ...params,
-      }),
-
-    /**
-     * @description Waiting 수정
-     *
-     * @tags waiting
-     * @name UpdateWaiting
-     * @request PUT:/waiting/{id}
-     */
-    updateWaiting: (id: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/waiting/${id}`,
-        method: 'PUT',
-        ...params,
-      }),
-
-    /**
-     * @description Waiting 삭제
-     *
-     * @tags waiting
-     * @name DeleteWaiting
-     * @request DELETE:/waiting/{id}
-     */
-    deleteWaiting: (id: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/waiting/${id}`,
-        method: 'DELETE',
-        ...params,
-      }),
-  }
   auth = {
     /**
      * @description 이메일 인증코드 전송
@@ -399,54 +343,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         type: ContentType.Json,
         ...params,
       }),
-
-    /**
-     * @description 팀원 조회
-     *
-     * @tags users
-     * @name GetTeammates
-     * @request GET:/users/teammates/{team}
-     * @secure
-     */
-    getTeammates: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/users/teammates/${team}`,
-        method: 'GET',
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description 팀 가입
-     *
-     * @tags users
-     * @name JoinTeam
-     * @request POST:/users/teams/{team}
-     * @secure
-     */
-    joinTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/users/teams/${team}`,
-        method: 'POST',
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description 팀 탈퇴
-     *
-     * @tags users
-     * @name LeaveTeam
-     * @request DELETE:/users/teams/{team}
-     * @secure
-     */
-    leaveTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/users/teams/${team}`,
-        method: 'DELETE',
-        secure: true,
-        ...params,
-      }),
   }
   me = {
     /**
@@ -462,6 +358,128 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/me`,
         method: 'GET',
         secure: true,
+        ...params,
+      }),
+  }
+  teams = {
+    /**
+     * @description 팀원 조회
+     *
+     * @tags teams
+     * @name GetTeammates
+     * @request GET:/teams/{team}/mates
+     * @secure
+     */
+    getTeammates: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/teams/${team}/mates`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description 그룹의 팀 조회
+     *
+     * @tags teams
+     * @name GetTeams
+     * @request GET:/teams/{group}
+     * @secure
+     */
+    getTeams: (group: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/teams/${group}`,
+        method: 'GET',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description 팀 가입
+     *
+     * @tags teams
+     * @name JoinTeam
+     * @request POST:/teams/{team}
+     * @secure
+     */
+    joinTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/teams/${team}`,
+        method: 'POST',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description 팀 탈퇴
+     *
+     * @tags teams
+     * @name LeaveTeam
+     * @request DELETE:/teams/{team}
+     * @secure
+     */
+    leaveTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/teams/${team}`,
+        method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+  }
+  waiting = {
+    /**
+     * @description Waiting 리스트 조회
+     *
+     * @tags waiting
+     * @name ReadWaitings
+     * @request GET:/waiting/{id}
+     */
+    readWaitings: (id: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/waiting/${id}`,
+        method: 'GET',
+        ...params,
+      }),
+
+    /**
+     * @description Waiting 생성
+     *
+     * @tags waiting
+     * @name CreateWaiting
+     * @request POST:/waiting/{id}
+     */
+    createWaiting: (id: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/waiting/${id}`,
+        method: 'POST',
+        ...params,
+      }),
+
+    /**
+     * @description Waiting 수정
+     *
+     * @tags waiting
+     * @name UpdateWaiting
+     * @request PUT:/waiting/{id}
+     */
+    updateWaiting: (id: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/waiting/${id}`,
+        method: 'PUT',
+        ...params,
+      }),
+
+    /**
+     * @description Waiting 삭제
+     *
+     * @tags waiting
+     * @name DeleteWaiting
+     * @request DELETE:/waiting/{id}
+     */
+    deleteWaiting: (id: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/waiting/${id}`,
+        method: 'DELETE',
         ...params,
       }),
   }
