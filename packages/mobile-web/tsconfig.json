@@ -19,6 +19,7 @@
       "@util": ["./src/utils"],
       "@context": ["./src/contexts"],
       "@hook": ["./src/hooks"],
+      "@api-type": ["./__generated__/Api.ts"],
       "@style/*": ["./styles/*"]
     }
   },
