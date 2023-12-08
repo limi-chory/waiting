@@ -8,12 +8,14 @@ import { ROUTES } from '@util'
 import { ModalPopup, MySettings } from '@component'
 import { useAxios } from '@hook'
 
+import { UserResponseDto } from '../__generated__/Api'
+
 const Home: React.FC = () => {
   const { isLoggedIn } = useLoginContext()
   const router = useRouter()
   const [isSettingOpen, setIsSettingOpen] = useState<boolean>(false)
   const { api } = useAxios()
-  const [me, setMe] = useState<any>({})
+  const [me, setMe] = useState<UserResponseDto | null>()
   const [callMeCompleted, setCallMeCompleted] = useState<boolean>(false)
 
   useEffect(() => {

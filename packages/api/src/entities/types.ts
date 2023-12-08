@@ -5,14 +5,14 @@ export enum UserType {
 
 export enum UserGroup {
   NOT_BELONG = 'NOT_BELONG',
-  NAVER = '네이버',
-  HYUNDAI_DPTSTR = '현대백화점',
+  NAVER = 'NAVER',
+  HYUNDAI_DPTSTR = 'HYUNDAI_DPTSTR',
 }
 
 export enum UserTeam {
-  G_PLACE_SERVICE_DEV = 'G플레이스서비스개발',
-  A = 'A team',
-  B = 'B team',
+  NAVER_DEV = 'NAVER_DEV',
+  HYUNDAI_DPTSTR_MARKETING = 'HYUNDAI_DPTSTR_MARKETING',
+  HYUNDAI_DPTSTR_BUSINESS = 'HYUNDAI_DPTSTR_BUSINESS',
 }
 
 export enum UserRole {
@@ -22,8 +22,8 @@ export enum UserRole {
 
 export const GroupTeamMap = {
   [UserGroup.NOT_BELONG]: [],
-  [UserGroup.NAVER]: [UserTeam.G_PLACE_SERVICE_DEV],
-  [UserGroup.HYUNDAI_DPTSTR]: [UserTeam.A, UserTeam.B],
+  [UserGroup.NAVER]: [UserTeam.NAVER_DEV],
+  [UserGroup.HYUNDAI_DPTSTR]: [UserTeam.HYUNDAI_DPTSTR_MARKETING, UserTeam.HYUNDAI_DPTSTR_BUSINESS],
 }
 
 export const EMAIL_GROUP_MAP = {

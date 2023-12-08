@@ -1,5 +1,5 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm'
-import { IsEmail, Length } from 'class-validator'
+import { IsEmail, IsEnum, Length } from 'class-validator'
 import * as bcrypt from 'bcrypt'
 
 import { Core, EMAIL_GROUP_MAP, UserGroup, UserRole, UserTeam, UserType } from '@entity'
@@ -20,18 +20,22 @@ export class User extends Core {
   name: string
 
   @Column({ type: 'enum', enum: UserGroup, default: UserGroup.NOT_BELONG })
+  @IsEnum(UserGroup)
   group: UserGroup
 
   @Column({ type: 'simple-array', default: null })
+  @IsEnum(UserTeam, { each: true })
   teams: UserTeam[]
 
   @Column({ type: 'enum', enum: UserRole, default: UserRole.REPORTER })
+  @IsEnum(UserRole)
   role: UserRole
 
   @Column({ nullable: true })
   image?: string
 
   @Column({ type: 'enum', enum: UserType, default: UserType.GENERAL })
+  @IsEnum(UserTeam)
   type: UserType
 
   @BeforeInsert()

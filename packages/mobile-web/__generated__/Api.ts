@@ -25,7 +25,30 @@ export interface CreateUserDto {
   name: string
 }
 
-export type UserResponseDto = object
+export enum UserGroup {
+  NOT_BELONG = 'NOT_BELONG',
+  NAVER = 'NAVER',
+  HYUNDAI_DPTSTR = 'HYUNDAI_DPTSTR',
+}
+
+export enum UserTeam {
+  NAVER_DEV = 'NAVER_DEV',
+  HYUNDAI_DPTSTR_MARKETING = 'HYUNDAI_DPTSTR_MARKETING',
+  HYUNDAI_DPTSTR_BUSINESS = 'HYUNDAI_DPTSTR_BUSINESS',
+}
+
+export enum UserRole {
+  REPORTER = 'REPORTER',
+  RECIPIENTS = 'RECIPIENTS',
+}
+
+export interface UserResponseDto {
+  email: string
+  name: string
+  group: UserGroup
+  teams: UserTeam
+  role: UserRole
+}
 
 export interface UpdateUserDto {
   /** 비밀번호 */
@@ -385,7 +408,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/users/teammates/{team}
      * @secure
      */
-    getTeammates: (team: 'G플레이스서비스개발' | 'A team' | 'B team', params: RequestParams = {}) =>
+    getTeammates: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/users/teammates/${team}`,
         method: 'GET',
@@ -401,7 +424,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/users/teams/{team}
      * @secure
      */
-    joinTeam: (team: 'G플레이스서비스개발' | 'A team' | 'B team', params: RequestParams = {}) =>
+    joinTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/users/teams/${team}`,
         method: 'POST',
@@ -417,7 +440,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/users/teams/{team}
      * @secure
      */
-    leaveTeam: (team: 'G플레이스서비스개발' | 'A team' | 'B team', params: RequestParams = {}) =>
+    leaveTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/users/teams/${team}`,
         method: 'DELETE',
