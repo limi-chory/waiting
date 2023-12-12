@@ -32,3 +32,7 @@
   cursor: pointer;
   line-height: 30px;
 }
+
+.closeButton:hover {
+  background-color: #e5b640;
+}

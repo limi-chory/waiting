@@ -17,27 +17,31 @@ const Home: React.FC = () => {
   }, [isLoggedIn, router])
 
   return (
-    <div className={styles.container}>
-      <ModalPopup isOpen={isSettingOpen} onClose={() => setIsSettingOpen(false)}>
-        <MySettings me={me || null} />
-      </ModalPopup>
+    <>
       <header className={styles.header}>
         <div className={styles.logo}>Waiting</div>
         <div className={styles.settings} onClick={() => setIsSettingOpen(true)}>
           ⚙️
         </div>
       </header>
-      <div className={styles.listContainer}>
-        <div className={styles.list}>
-          {/* 리스트 아이템들을 여기에 추가 */}
-          {Array.from({ length: 20 }, (_, index) => (
-            <div key={index} className={styles.listItem}>
-              Item {index + 1}
-            </div>
-          ))}
+      <div className={styles.container}>
+        <ModalPopup isOpen={isSettingOpen} onClose={() => setIsSettingOpen(false)}>
+          <MySettings onClose={() => setIsSettingOpen(false)} />
+        </ModalPopup>
+
+        <div className={styles.listContainer}>
+          우리 팀원
+          <div className={styles.list}>
+            {/* 리스트 아이템들을 여기에 추가 */}
+            {Array.from({ length: 20 }, (_, index) => (
+              <div key={index} className={styles.listItem}>
+                Item {index + 1}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

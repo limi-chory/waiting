@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator'
 
-import { UserGroup, UserRole, UserTeam } from '@entity'
+import { UserRole } from '@entity'
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -23,13 +23,20 @@ export class CreateUserDto {
 export class UpdateUserDto {
   @IsNotEmpty()
   @IsString()
-  @ApiProperty({ description: '비밀번호' })
-  password: string
-
-  @IsNotEmpty()
-  @IsString()
   @ApiProperty({ description: '이름' })
   name: string
+
+  @IsNotEmpty()
+  @ApiProperty({
+    enum: UserRole,
+    enumName: 'UserRole',
+  })
+  @IsEnum(UserRole)
+  role: UserRole
+
+  @IsNotEmpty()
+  @ApiProperty({ description: '팀', isArray: true, type: 'string' })
+  teams: string[]
 }
 
 export class LoginDto {
@@ -54,19 +61,11 @@ export class UserResponseDto {
   @ApiProperty()
   name: string
 
-  @ApiProperty({
-    enum: UserGroup,
-    enumName: 'UserGroup',
-  })
-  @IsEnum(UserGroup)
-  group: UserGroup
+  @ApiProperty()
+  group: string
 
-  @ApiProperty({
-    enum: Object.values(UserTeam),
-    enumName: 'UserTeam',
-  })
-  @IsEnum(UserTeam, { each: true })
-  teams: UserTeam[]
+  @ApiProperty()
+  teams: string[]
 
   @ApiProperty({
     enum: UserRole,

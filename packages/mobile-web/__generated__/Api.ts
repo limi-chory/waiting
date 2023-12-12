@@ -25,18 +25,6 @@ export interface CreateUserDto {
   name: string
 }
 
-export enum UserGroup {
-  NOT_BELONG = 'NOT_BELONG',
-  NAVER = 'NAVER',
-  HYUNDAI_DPTSTR = 'HYUNDAI_DPTSTR',
-}
-
-export enum UserTeam {
-  NAVER_DEV = 'NAVER_DEV',
-  HYUNDAI_DPTSTR_MARKETING = 'HYUNDAI_DPTSTR_MARKETING',
-  HYUNDAI_DPTSTR_BUSINESS = 'HYUNDAI_DPTSTR_BUSINESS',
-}
-
 export enum UserRole {
   REPORTER = 'REPORTER',
   RECIPIENTS = 'RECIPIENTS',
@@ -46,16 +34,17 @@ export interface UserResponseDto {
   id: number
   email: string
   name: string
-  group: UserGroup
-  teams: UserTeam
+  group: string
+  teams: string[]
   role: UserRole
 }
 
 export interface UpdateUserDto {
-  /** 비밀번호 */
-  password: string
   /** 이름 */
   name: string
+  role: UserRole
+  /** 팀 */
+  teams: string[]
 }
 
 export type QueryParamsType = Record<string | number, any>
@@ -370,7 +359,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/teams/{team}/mates
      * @secure
      */
-    getTeammates: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
+    getTeammates: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS' | 'HYUNDAI_DPTSTR_HUMAN_RESOURCE', params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/teams/${team}/mates`,
         method: 'GET',
@@ -383,12 +372,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags teams
      * @name GetTeams
-     * @request GET:/teams/{group}
+     * @request GET:/teams
      * @secure
      */
-    getTeams: (group: string, params: RequestParams = {}) =>
+    getTeams: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/teams/${group}`,
+        path: `/teams`,
         method: 'GET',
         secure: true,
         ...params,
@@ -402,7 +391,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/teams/{team}
      * @secure
      */
-    joinTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
+    joinTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS' | 'HYUNDAI_DPTSTR_HUMAN_RESOURCE', params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/teams/${team}`,
         method: 'POST',
@@ -418,7 +407,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/teams/{team}
      * @secure
      */
-    leaveTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS', params: RequestParams = {}) =>
+    leaveTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS' | 'HYUNDAI_DPTSTR_HUMAN_RESOURCE', params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/teams/${team}`,
         method: 'DELETE',

@@ -1,9 +1,10 @@
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Like, Not, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 
 import { GroupTeamMap, User, UserTeam } from '@entity'
 import { CreateUserDto, UpdateUserDto, UserResponseDto } from '@dto'
+import { addLabelsToUser, getTeamFromLabel } from '@util'
 
 @Injectable()
 export class UserService {
@@ -17,19 +18,6 @@ export class UserService {
     return this.users.findOne({ where: { id } })
   }
 
-  async getTeammates(user: User, team: UserTeam) {
-    try {
-      if (!user.teams || !user.teams.includes(team)) throw new ForbiddenException()
-
-      return this.users.find({
-        where: { teams: Like(`%${team}%`) as any, id: Not(user.id) },
-      })
-    } catch (e) {
-      console.error(e)
-      throw e
-    }
-  }
-
   async createUser({ email, password, name }: CreateUserDto): Promise<UserResponseDto> {
     try {
       const exists = await this.users.exist({ where: { email } })
@@ -37,21 +25,25 @@ export class UserService {
       if (exists) throw new ConflictException()
 
       const user = await this.users.save(this.users.create({ email, password, name }))
-      return user
+
+      return addLabelsToUser(user)
     } catch (e) {
       console.error(e)
       throw e
     }
   }
 
-  async updateUser(userId: number, { password, name }: UpdateUserDto): Promise<UserResponseDto> {
+  async updateUser(userId: number, { name, role, teams }: UpdateUserDto): Promise<UserResponseDto> {
     try {
       const user = await this.getUserById(userId)
 
-      if (password) user.password = password
       if (name) user.name = name
+      if (role) user.role = role
+      if (teams) user.teams = teams.map((team) => getTeamFromLabel(team))
 
-      return this.users.save(user)
+      const result = await this.users.save(user)
+
+      return addLabelsToUser(result)
     } catch (e) {
       console.error(e)
       throw e
@@ -67,7 +59,9 @@ export class UserService {
       if (user.teams && user.teams.includes(team)) throw new ConflictException()
       user.teams = user.teams ? [...user.teams, team] : [team]
 
-      return this.users.save(user)
+      const result = await this.users.save(user)
+
+      return addLabelsToUser(result)
     } catch (e) {
       console.error(e)
       throw e
@@ -81,7 +75,10 @@ export class UserService {
       if (!user.teams || !user.teams.includes(team)) return user
 
       user.teams = [...user.teams].filter((t) => t !== team)
-      return this.users.save(user)
+
+      const result = await this.users.save(user)
+
+      return addLabelsToUser(result)
     } catch (e) {
       console.error(e)
       throw e

@@ -4,6 +4,7 @@ import { Like, Not, Repository } from 'typeorm'
 
 import { GroupTeamMap, User, UserGroup, UserTeam } from '@entity'
 import { UserResponseDto } from '@dto'
+import { getTeamLabels } from '@util'
 
 import { UserService } from '../user'
 
@@ -24,8 +25,8 @@ export class TeamService {
     }
   }
 
-  async getTeams(group: UserGroup): Promise<UserTeam[]> {
-    return GroupTeamMap[group]
+  async getTeams(group: UserGroup): Promise<string[]> {
+    return getTeamLabels(GroupTeamMap[group])
   }
 
   async joinTeam(userId: number, team: UserTeam): Promise<UserResponseDto> {

@@ -1,5 +1,6 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 
 import { useAxios, useCookies } from '@hook'
 import { UserResponseDto } from '@api-type'
@@ -11,6 +12,8 @@ type LoginContextType = Partial<{
   me: UserResponseDto | null
   loginToken: string
   isLoggedIn: boolean
+  logout: () => void
+  refetch: () => void
   setLoginTokenCookie: (token: string, expires: Date) => void
 }>
 
@@ -20,6 +23,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   const [cookies, setCookie, removeCookie] = useCookies([CookieKeys.LoginToken])
   const cookieLoginToken = cookies[CookieKeys.LoginToken]
   const { setAuthorization } = useAxios()
+  const router = useRouter()
 
   const browser = typeof window !== 'undefined'
   const [loginToken, setLoginToken] = useState<string>(browser && cookieLoginToken)
@@ -57,7 +61,14 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     setLoginToken(token)
   }
 
-  return <LoginContext.Provider value={{ me, loginToken, isLoggedIn, setLoginTokenCookie }}>{children}</LoginContext.Provider>
+  const logout = () => {
+    removeCookie(CookieKeys.LoginToken)
+    setLoginToken('')
+    setAuthorization(loginToken)
+    router.push('/')
+  }
+
+  return <LoginContext.Provider value={{ me, loginToken, isLoggedIn, refetch: fetchMe, setLoginTokenCookie, logout }}>{children}</LoginContext.Provider>
 }
 
 export const useLoginContext = () => useContext(LoginContext)

@@ -26,7 +26,7 @@ export class TeamController {
     return this.teamService.getTeammates(user, team)
   }
 
-  @Get('/:group')
+  @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ description: '그룹의 팀 조회' })

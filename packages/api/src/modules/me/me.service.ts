@@ -4,6 +4,7 @@ import { Repository } from 'typeorm'
 
 import { UserResponseDto } from '@dto'
 import { User } from '@entity'
+import { addLabelsToUser } from '@util'
 
 @Injectable()
 export class MeService {
@@ -12,7 +13,7 @@ export class MeService {
   async getMe(id: number): Promise<UserResponseDto> {
     try {
       const me = await this.users.findOne({ where: { id } })
-      return me
+      return addLabelsToUser(me)
     } catch (e) {
       console.error(e)
       throw e
