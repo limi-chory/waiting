@@ -5,9 +5,12 @@ import axios from 'axios'
 import styles from '@style/signup.module.css'
 
 import { API_URL } from '../config'
+import { useAxios } from '../src/hooks/useAxios'
 
 const Signup: React.FC = () => {
   const router = useRouter()
+  const { api } = useAxios()
+
   const [email, setEmail] = useState<string>('')
   const [name, setName] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -59,7 +62,7 @@ const Signup: React.FC = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await axios.post(`${API_URL}/users`, { email, password, name })
+      const response = await api.users.createUser({ email, password, name })
 
       if (response?.data?.email) {
         router.push('/login')

@@ -1,6 +1,5 @@
 .container {
   max-width: 430px;
-  margin: 0 15px;
 }
 
 .header {
@@ -24,6 +23,7 @@
 .listContainer {
   overflow: hidden;
   position: relative;
+  margin: 12px;
 }
 
 .list {

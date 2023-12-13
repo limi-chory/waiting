@@ -25,6 +25,13 @@ export interface CreateUserDto {
   name: string
 }
 
+export interface LabeledDto {
+  /** The value property of the labeled DTO */
+  value: string
+  /** The label property of the labeled DTO */
+  label: string
+}
+
 export enum UserRole {
   REPORTER = 'REPORTER',
   RECIPIENTS = 'RECIPIENTS',
@@ -34,8 +41,8 @@ export interface UserResponseDto {
   id: number
   email: string
   name: string
-  group: string
-  teams: string[]
+  group: LabeledDto
+  teams: LabeledDto[]
   role: UserRole
 }
 
@@ -356,12 +363,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags teams
      * @name GetTeammates
-     * @request GET:/teams/{team}/mates
+     * @request GET:/teams/mates
      * @secure
      */
-    getTeammates: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS' | 'HYUNDAI_DPTSTR_HUMAN_RESOURCE', params: RequestParams = {}) =>
+    getTeammates: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/teams/${team}/mates`,
+        path: `/teams/mates`,
         method: 'GET',
         secure: true,
         ...params,
@@ -379,38 +386,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<void, any>({
         path: `/teams`,
         method: 'GET',
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description 팀 가입
-     *
-     * @tags teams
-     * @name JoinTeam
-     * @request POST:/teams/{team}
-     * @secure
-     */
-    joinTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS' | 'HYUNDAI_DPTSTR_HUMAN_RESOURCE', params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/teams/${team}`,
-        method: 'POST',
-        secure: true,
-        ...params,
-      }),
-
-    /**
-     * @description 팀 탈퇴
-     *
-     * @tags teams
-     * @name LeaveTeam
-     * @request DELETE:/teams/{team}
-     * @secure
-     */
-    leaveTeam: (team: 'NAVER_DEV' | 'HYUNDAI_DPTSTR_MARKETING' | 'HYUNDAI_DPTSTR_BUSINESS' | 'HYUNDAI_DPTSTR_HUMAN_RESOURCE', params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/teams/${team}`,
-        method: 'DELETE',
         secure: true,
         ...params,
       }),

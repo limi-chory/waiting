@@ -1,5 +1,5 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm'
-import { IsEmail, IsEnum, Length } from 'class-validator'
+import { IsArray, IsEmail, IsEnum, Length } from 'class-validator'
 import * as bcrypt from 'bcrypt'
 
 import { Core, EMAIL_GROUP_MAP, UserGroup, UserRole, UserTeam, UserType } from '@entity'
@@ -23,7 +23,7 @@ export class User extends Core {
   @IsEnum(UserGroup)
   group: UserGroup
 
-  @Column({ type: 'simple-array', default: null })
+  @Column('simple-array', { default: null })
   @IsEnum(UserTeam, { each: true })
   teams: UserTeam[]
 
@@ -40,7 +40,7 @@ export class User extends Core {
 
   @BeforeInsert()
   setGroup() {
-    const [domain] = this.email.split('@')[1].split('.')
+    const [_, domain] = this.email.split('@')
     let group = UserGroup.NOT_BELONG
 
     if (domain in EMAIL_GROUP_MAP) group = EMAIL_GROUP_MAP[domain]

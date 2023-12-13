@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import styles from '@style/MySettings.module.css'
 
-import { UserRole } from '@api-type'
+import { LabeledDto, UserRole } from '@api-type'
 import { useLoginContext } from '@context'
 
 import { useAxios } from '../../hooks/useAxios'
@@ -19,8 +19,8 @@ export const MySettings = ({ onClose }: MySettingsProps) => {
 
   const [editedName, setEditedName] = useState<string>(name as string)
   const [editedRole, setEditedRole] = useState<UserRole>(role as UserRole)
-  const [teams, setTeams] = useState<string[]>(_teams || [])
-  const [joinableTeams, setJoinableTeams] = useState<string[]>([])
+  const [teams, setTeams] = useState<LabeledDto[]>(_teams || [])
+  const [joinableTeams, setJoinableTeams] = useState<LabeledDto[]>([])
   const [isTeamDropdownOpen, setIsTeamDropdownOpen] = useState<boolean>(false)
 
   const isRecipients = editedRole === UserRole.RECIPIENTS
@@ -29,7 +29,8 @@ export const MySettings = ({ onClose }: MySettingsProps) => {
   const fetchTeams = async () => {
     try {
       const response = (await api.teams.getTeams()) as any
-      setJoinableTeams([...response.data].filter((team) => !teams.includes(team)))
+      const teamsLabel = teams.map((team) => team.label)
+      setJoinableTeams([...response.data].filter((team) => !teamsLabel.includes(team.label)))
     } catch (e) {
       console.error(e)
     }
@@ -40,18 +41,18 @@ export const MySettings = ({ onClose }: MySettingsProps) => {
     fetchTeams()
   }
 
-  const handleSelectTeam = (team: string) => {
+  const handleSelectTeam = (team: LabeledDto) => {
     setTeams([...teams, team])
     setIsTeamDropdownOpen(false)
   }
 
-  const handleLeaveTeam = (team: string) => {
-    setTeams(teams.filter((t) => t !== team))
+  const handleLeaveTeam = (team: LabeledDto) => {
+    setTeams(teams.filter((t) => t.value !== team.value))
   }
 
   const updateUser = async () => {
     try {
-      await api.users.updateUser({ name: editedName, role: editedRole, teams })
+      await api.users.updateUser({ name: editedName, role: editedRole, teams: teams.map(({ value }) => value) })
       onClose()
       refetch?.()
     } catch (e) {
@@ -67,7 +68,7 @@ export const MySettings = ({ onClose }: MySettingsProps) => {
       </div>
       <div className={styles['form-group']}>
         <label>소속</label>
-        <input type="text" value={group} disabled={true} />
+        <input type="text" value={group?.label} disabled={true} />
       </div>
       <div className={styles['form-group']}>
         <label>이름</label>
@@ -89,16 +90,16 @@ export const MySettings = ({ onClose }: MySettingsProps) => {
           <div className={styles.teamDropdown}>
             {joinableTeams.length === 0 && <div className={styles.teamDropdownItem}>결과 없음</div>}
             {joinableTeams?.map((team) => (
-              <div key={team} className={styles.teamDropdownItem} onClick={() => handleSelectTeam(team)}>
-                {team}
+              <div key={team.value} className={styles.teamDropdownItem} onClick={() => handleSelectTeam(team)}>
+                {team.label}
               </div>
             ))}
           </div>
         )}
         <div className={styles.teamsContainer}>
           {teams?.map((team) => (
-            <div key={team} className={styles.teamItem}>
-              {team}
+            <div key={team.value} className={styles.teamItem}>
+              {team.label}
               <button className={styles.removeButton} onClick={() => handleLeaveTeam(team)}>
                 X
               </button>

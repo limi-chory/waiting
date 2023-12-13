@@ -1,11 +1,27 @@
 import { User, UserGroup, UserGroupLabel, UserTeam, UserTeamLabel } from '@entity'
 
 export const getTeamLabels = (teams: UserTeam[]) => {
-  return teams.map((team) => UserTeamLabel[team])
+  if (!teams) return []
+  return teams.map((team) => {
+    return {
+      value: team,
+      label: UserTeamLabel[team],
+    }
+  })
+}
+
+export const getTeamLabel = (team: UserTeam) => {
+  return {
+    value: team,
+    label: UserTeamLabel[team],
+  }
 }
 
 export const getGroupLabel = (group: UserGroup) => {
-  return UserGroupLabel[group]
+  return {
+    value: group,
+    label: UserGroupLabel[group],
+  }
 }
 
 export const addLabelsToUser = (user: User) => {

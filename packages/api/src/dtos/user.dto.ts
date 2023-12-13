@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator'
 
 import { UserRole } from '@entity'
+import { LabeledDto } from '@dto'
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -61,11 +62,11 @@ export class UserResponseDto {
   @ApiProperty()
   name: string
 
-  @ApiProperty()
-  group: string
+  @ApiProperty({ type: () => LabeledDto })
+  group: LabeledDto
 
-  @ApiProperty()
-  teams: string[]
+  @ApiProperty({ type: () => LabeledDto, isArray: true })
+  teams: LabeledDto[]
 
   @ApiProperty({
     enum: UserRole,

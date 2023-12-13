@@ -4,7 +4,7 @@ import { Repository } from 'typeorm'
 
 import { GroupTeamMap, User, UserTeam } from '@entity'
 import { CreateUserDto, UpdateUserDto, UserResponseDto } from '@dto'
-import { addLabelsToUser, getTeamFromLabel } from '@util'
+import { addLabelsToUser } from '@util'
 
 @Injectable()
 export class UserService {
@@ -39,7 +39,7 @@ export class UserService {
 
       if (name) user.name = name
       if (role) user.role = role
-      if (teams) user.teams = teams.map((team) => getTeamFromLabel(team))
+      if (teams) user.teams = teams as UserTeam[]
 
       const result = await this.users.save(user)
 
@@ -58,23 +58,6 @@ export class UserService {
       if (!Object.values(UserTeam).includes(team)) throw new NotFoundException()
       if (user.teams && user.teams.includes(team)) throw new ConflictException()
       user.teams = user.teams ? [...user.teams, team] : [team]
-
-      const result = await this.users.save(user)
-
-      return addLabelsToUser(result)
-    } catch (e) {
-      console.error(e)
-      throw e
-    }
-  }
-
-  async leaveTeam(userId: number, team: UserTeam): Promise<UserResponseDto> {
-    try {
-      const user = await this.getUserById(userId)
-
-      if (!user.teams || !user.teams.includes(team)) return user
-
-      user.teams = [...user.teams].filter((t) => t !== team)
 
       const result = await this.users.save(user)
 

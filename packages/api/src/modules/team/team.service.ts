@@ -1,10 +1,9 @@
-import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Like, Not, Repository } from 'typeorm'
 
-import { GroupTeamMap, User, UserGroup, UserTeam } from '@entity'
-import { UserResponseDto } from '@dto'
-import { getTeamLabels } from '@util'
+import { GroupTeamMap, User, UserGroup } from '@entity'
+import { getTeamLabel, getTeamLabels } from '@util'
 
 import { UserService } from '../user'
 
@@ -12,50 +11,30 @@ import { UserService } from '../user'
 export class TeamService {
   constructor(@InjectRepository(User) private readonly users: Repository<User>, private readonly userService: UserService) {}
 
-  async getTeammates(user: User, team: UserTeam) {
+  async getTeammates(user: User) {
     try {
-      if (!user.teams || !user.teams.includes(team)) throw new ForbiddenException()
+      if (!user.teams?.length) return {}
 
-      return this.users.find({
-        where: { teams: Like(`%${team}%`) as any, id: Not(user.id) },
-      })
+      const teamUsersMap: Record<string, User[]> = {}
+
+      for (const team of user.teams) {
+        const teammates = await this.users.find({
+          where: { teams: Like(`%${team}%`) as any, id: Not(user.id) },
+          select: ['id', 'email', 'name', 'role', 'teams'],
+        })
+
+        const teamWithLabel = getTeamLabel(team)
+        teamUsersMap[teamWithLabel.label] = teammates
+      }
+
+      return teamUsersMap
     } catch (e) {
       console.error(e)
       throw e
     }
   }
 
-  async getTeams(group: UserGroup): Promise<string[]> {
+  async getTeams(group: UserGroup): Promise<object[]> {
     return getTeamLabels(GroupTeamMap[group])
-  }
-
-  async joinTeam(userId: number, team: UserTeam): Promise<UserResponseDto> {
-    try {
-      const user = await this.userService.getUserById(userId)
-
-      if (!GroupTeamMap[user.group].includes(team)) throw new ForbiddenException()
-      if (!Object.values(UserTeam).includes(team)) throw new NotFoundException()
-      if (user.teams && user.teams.includes(team)) throw new ConflictException()
-      user.teams = user.teams ? [...user.teams, team] : [team]
-
-      return this.users.save(user)
-    } catch (e) {
-      console.error(e)
-      throw e
-    }
-  }
-
-  async leaveTeam(userId: number, team: UserTeam): Promise<UserResponseDto> {
-    try {
-      const user = await this.userService.getUserById(userId)
-
-      if (!user.teams || !user.teams.includes(team)) return user
-
-      user.teams = [...user.teams].filter((t) => t !== team)
-      return this.users.save(user)
-    } catch (e) {
-      console.error(e)
-      throw e
-    }
   }
 }
