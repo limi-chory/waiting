@@ -26,11 +26,14 @@ const Signup: React.FC = () => {
   const [isSignUpActivated, setIsSignUpActivated] = useState<boolean>(false)
 
   const handleSendVerificationCode = async () => {
+    console.log('click verify code')
     if (email && !isVerificationButtonDisabled) {
       try {
         setIsVerificationButtonDisabled(true)
+        console.log('before api')
 
         const response = await axios.post(`${API_URL}/auth/email-verification/${email}`)
+        console.log(response)
         if (response.data) {
           setIsVerificationCodeActivated(true)
           setTimeout(() => {
