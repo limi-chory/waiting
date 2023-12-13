@@ -14,12 +14,12 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  if (isLoggedIn) router.back()
+  if (isLoggedIn) router.push(ROUTES.home)
 
   const handleLogin = async () => {
     try {
       const response = await api.auth.login({ email, password })
-      const { token, expires } = response?.data as any || {}
+      const { token, expires } = (response?.data as any) || {}
 
       if (token) {
         setLoginTokenCookie?.(token, new Date(expires))
