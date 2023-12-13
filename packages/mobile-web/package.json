@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "codegen": "swagger-typescript-api -p http://localhost:4000/api-doc-json -o ./__generated__"
+    "codegen": "swagger-typescript-api -p http://ec2-3-35-0-217.ap-northeast-2.compute.amazonaws.com:4000/api-doc-json -o ./__generated__"
   },
   "dependencies": {
     "@types/node": "20.10.0",
