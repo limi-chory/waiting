@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
@@ -27,14 +26,12 @@ const Signup: React.FC = () => {
   const [isSignUpActivated, setIsSignUpActivated] = useState<boolean>(false)
 
   const handleSendVerificationCode = async () => {
-    console.log('click verify code')
     if (email && !isVerificationButtonDisabled) {
       try {
         setIsVerificationButtonDisabled(true)
-        console.log('before api')
 
         const response = await axios.post(`${API_URL}/auth/email-verification/${email}`)
-        console.log(response)
+
         if (response.data) {
           setIsVerificationCodeActivated(true)
           setTimeout(() => {
@@ -95,13 +92,25 @@ const Signup: React.FC = () => {
       <form>
         <div className={styles['form-group']}>
           <label htmlFor="email">이메일</label>
-          <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isVerified} />
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={isVerified}
+          />
           {isEmailDuplicated && <p className={styles['error-message']}>해당 이메일로 가입된 계정이 존재합니다.</p>}
         </div>
         <div className={styles['form-group']}>
           <label htmlFor="verificationCode">이메일 인증코드</label>
           <div className={styles['verification-code-input']}>
-            <input type="text" id="verificationCode" value={verificationCode} onChange={(e) => setVerificationCode(e.target.value)} disabled={isVerified} />
+            <input
+              type="text"
+              id="verificationCode"
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
+              disabled={isVerified}
+            />
             <button
               type="button"
               className={styles['verification-code-check']}
@@ -131,7 +140,12 @@ const Signup: React.FC = () => {
         </div>
         <div className={styles['form-group']}>
           <label htmlFor="confirmPassword">비밀번호 확인</label>
-          <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+          <input
+            type="password"
+            id="confirmPassword"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
           {!isPasswordMatch && <p className={styles['error-message']}>비밀번호가 일치하지 않습니다.</p>}
         </div>
 

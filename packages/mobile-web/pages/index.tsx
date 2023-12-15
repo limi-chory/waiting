@@ -26,9 +26,9 @@ const Home: React.FC = () => {
     }
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchTeammates()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [me])
 
   useEffect(() => {

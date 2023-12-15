@@ -13,6 +13,7 @@ const Login: React.FC = () => {
   const { api } = useAxios()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loginFail, setLoginFail] = useState<boolean>(false)
 
   if (isLoggedIn) router.push(ROUTES.home)
 
@@ -25,7 +26,11 @@ const Login: React.FC = () => {
         setLoginTokenCookie?.(token, new Date(expires))
         router.push(ROUTES.home)
       }
-    } catch (e) {
+    } catch (e: any) {
+      if (e.error.statusCode === 401) {
+        setPassword('')
+        setLoginFail(true)
+      }
       console.error(e)
     }
   }
@@ -40,8 +45,17 @@ const Login: React.FC = () => {
         </div>
         <div className={styles['form-group']}>
           <label htmlFor="password">비밀번호</label>
-          <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyUp={(e) => {
+              if (e.key === 'Enter') handleLogin()
+            }}
+          />
         </div>
+        {loginFail && <p className={styles['error-message']}>아이디 또는 비밀번호를 잘못 입력했습니다.</p>}
         <div className={styles['form-group']}>
           <button type="button" className={styles['login-button']} onClick={handleLogin}>
             Login

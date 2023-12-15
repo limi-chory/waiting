@@ -41,7 +41,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
         removeCookie(CookieKeys.LoginToken)
       }
     } catch (e) {
-      // console.error(e)
+      console.error(e)
       setIsLoggedIn(false)
       removeCookie(CookieKeys.LoginToken)
     }
@@ -52,7 +52,6 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   }, [loginToken, setAuthorization])
 
   useEffect(() => {
-    setIsLoggedIn(true)
     fetchMe()
   }, [loginToken])
 
