@@ -39,7 +39,7 @@ export const UserTeamLabel = {
 
 export enum UserRole {
   REPORTER = 'REPORTER',
-  RECIPIENTS = 'RECIPIENTS',
+  RECIPIENT = 'RECIPIENT',
 }
 
 export const GroupTeamMap = {
@@ -52,4 +52,10 @@ export const GroupTeamMap = {
 export const EMAIL_GROUP_MAP = {
   'navercorp.com': UserGroup.NAVER,
   'hddfs.com': UserGroup.HYUNDAI_DFS,
+}
+
+export enum ReportStatus {
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
 }

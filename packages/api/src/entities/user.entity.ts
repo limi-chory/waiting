@@ -1,5 +1,5 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm'
-import { IsArray, IsEmail, IsEnum, Length } from 'class-validator'
+import { IsEmail, IsEnum, Length } from 'class-validator'
 import * as bcrypt from 'bcrypt'
 
 import { Core, EMAIL_GROUP_MAP, UserGroup, UserRole, UserTeam, UserType } from '@entity'
