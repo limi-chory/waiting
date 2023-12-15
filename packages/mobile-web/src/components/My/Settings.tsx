@@ -23,8 +23,8 @@ export const MySettings = ({ onClose }: MySettingsProps) => {
   const [joinableTeams, setJoinableTeams] = useState<LabeledDto[]>([])
   const [isTeamDropdownOpen, setIsTeamDropdownOpen] = useState<boolean>(false)
 
-  const isRecipients = editedRole === UserRole.RECIPIENTS
-  const handleUserRoleChanges = () => setEditedRole(isRecipients ? UserRole.REPORTER : UserRole.RECIPIENTS)
+  const isRecipients = editedRole === UserRole.RECIPIENT
+  const handleUserRoleChanges = () => setEditedRole(isRecipients ? UserRole.REPORTER : UserRole.RECIPIENT)
 
   const fetchTeams = async () => {
     try {

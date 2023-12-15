@@ -34,7 +34,7 @@ export interface LabeledDto {
 
 export enum UserRole {
   REPORTER = 'REPORTER',
-  RECIPIENTS = 'RECIPIENTS',
+  RECIPIENT = 'RECIPIENT',
 }
 
 export interface UserResponseDto {
@@ -390,59 +390,59 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
   }
-  waiting = {
+  reports = {
     /**
-     * @description Waiting 리스트 조회
+     * @description Report 리스트 조회
      *
-     * @tags waiting
-     * @name ReadWaitings
-     * @request GET:/waiting/{id}
+     * @tags reports
+     * @name ReadReports
+     * @request GET:/reports/{id}
      */
-    readWaitings: (id: string, params: RequestParams = {}) =>
+    readReports: (id: string, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/waiting/${id}`,
+        path: `/reports/${id}`,
         method: 'GET',
         ...params,
       }),
 
     /**
-     * @description Waiting 생성
+     * @description Report 생성
      *
-     * @tags waiting
-     * @name CreateWaiting
-     * @request POST:/waiting/{id}
+     * @tags reports
+     * @name CreateReport
+     * @request POST:/reports/{id}
      */
-    createWaiting: (id: string, params: RequestParams = {}) =>
+    createReport: (id: string, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/waiting/${id}`,
+        path: `/reports/${id}`,
         method: 'POST',
         ...params,
       }),
 
     /**
-     * @description Waiting 수정
+     * @description Report 수정
      *
-     * @tags waiting
-     * @name UpdateWaiting
-     * @request PUT:/waiting/{id}
+     * @tags reports
+     * @name UpdateReport
+     * @request PUT:/reports/{id}
      */
-    updateWaiting: (id: string, params: RequestParams = {}) =>
+    updateReport: (id: string, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/waiting/${id}`,
+        path: `/reports/${id}`,
         method: 'PUT',
         ...params,
       }),
 
     /**
-     * @description Waiting 삭제
+     * @description Report 삭제
      *
-     * @tags waiting
-     * @name DeleteWaiting
-     * @request DELETE:/waiting/{id}
+     * @tags reports
+     * @name DeleteReport
+     * @request DELETE:/reports/{id}
      */
-    deleteWaiting: (id: string, params: RequestParams = {}) =>
+    deleteReport: (id: string, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/waiting/${id}`,
+        path: `/reports/${id}`,
         method: 'DELETE',
         ...params,
       }),
