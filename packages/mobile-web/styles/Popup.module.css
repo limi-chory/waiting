@@ -37,3 +37,9 @@
 .closeButton:hover {
   background-color: #e5b640;
 }
+
+.closeButton svg {
+  width: 12px;
+  height: 12px;
+  fill: #282828;
+}

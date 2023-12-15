@@ -78,6 +78,11 @@ module.exports = {
             position: 'after',
           },
           {
+            pattern: '@icon/**',
+            group: 'external',
+            position: 'after',
+          },
+          {
             pattern: '@*',
             group: 'external',
             position: 'after',

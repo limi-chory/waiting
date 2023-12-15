@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react'
 
 import styles from '@style/Home.module.css'
 
+import SettingsIcon from '@icon/settings.svg'
+
 import { useLoginContext } from '@context'
 import { ROUTES } from '@util'
-import { ModalPopup, MySettings } from '@component'
+import { Menu, ModalPopup, MySettings } from '@component'
 import { useAxios } from '@hook'
 import { UserResponseDto } from '@api-type'
 
@@ -38,9 +40,10 @@ const Home: React.FC = () => {
   return (
     <>
       <header className={styles.header}>
+        <Menu />
         <div className={styles.logo}>Waiting</div>
         <div className={styles.settings} onClick={() => setIsSettingOpen(true)}>
-          ⚙️
+          <SettingsIcon />
         </div>
       </header>
       <div className={styles.container}>
