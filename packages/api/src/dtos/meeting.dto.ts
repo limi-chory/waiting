@@ -23,13 +23,16 @@ export class MeetingResponseDto {
   createdAt: Date
 
   @ApiProperty({ type: () => User })
-  reporter: User
+  reporter?: User
 
   @ApiProperty({ type: () => User })
-  recipient: User
+  recipient?: User
 
   @ApiProperty()
   content: string
+
+  @ApiProperty()
+  myWaitingNumber?: number
 
   @ApiProperty({ enum: MeetingStatus, enumName: 'MeetingStatus' })
   @IsEnum(MeetingStatus)

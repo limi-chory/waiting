@@ -13,16 +13,26 @@ import { JwtAuthGuard } from '../auth/jwt.auth.guard'
 export class MeetingController {
   constructor(private readonly meetingService: MeetingService) {}
 
-  @Get('/:id')
-  @ApiOperation({ description: 'Meeting 조회' })
-  readMeeting(@Param('id') id: number) {
-    return this.meetingService.getMeetingById(id)
+  @Get('/sent')
+  @ApiOperation({ description: '보낸 Meeting 리스트 조회' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getSentMeetings(@AuthUser() user: User) {
+    return this.meetingService.getSentMeetingsByUser(user.id)
+  }
+
+  @Get('/received')
+  @ApiOperation({ description: '받은 Meeting 리스트 조회' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  getReceivedMeetings(@AuthUser() user: User) {
+    return this.meetingService.getReceivedMeetingsByUser(user.id)
   }
 
   @Get('/:id')
-  @ApiOperation({ description: 'Meeting 리스트 조회' })
-  readMeetings(@Param('id') id: string): string {
-    return 'read All'
+  @ApiOperation({ description: 'Meeting 조회' })
+  getMeeting(@Param('id') id: number) {
+    return this.meetingService.getMeetingById(id)
   }
 
   @Post('/:recipientId')

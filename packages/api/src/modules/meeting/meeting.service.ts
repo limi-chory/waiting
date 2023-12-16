@@ -6,8 +6,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Between, Not, Repository } from 'typeorm'
-import { startOfDay, endOfDay } from 'date-fns'
+import { Between, LessThanOrEqual, Repository } from 'typeorm'
+import { startOfDay, endOfDay, isToday } from 'date-fns'
 
 import { Meeting, MeetingStatus, UserRole } from '@entity'
 import { MeetingRequestDto, MeetingResponseDto, MeetingStatusRequestDto } from '@dto'
@@ -33,6 +33,56 @@ export class MeetingService {
     })
   }
 
+  async getSentMeetingsByUser(userId: number): Promise<MeetingResponseDto[]> {
+    try {
+      const meetings = (await this.meetings.find({
+        where: { reporter: { id: userId } },
+        relations: ['recipient'],
+        order: { createdAt: 'DESC' },
+      })) as MeetingResponseDto[]
+
+      for (const meeting of meetings) {
+        const { id, status, createdAt, recipient } = meeting
+        if (status === MeetingStatus.PENDING && isToday(createdAt)) {
+          meeting.myWaitingNumber = await this.getWaitingNumber(recipient.id, id)
+        }
+      }
+
+      return meetings
+    } catch (e) {
+      console.error(e)
+      throw e
+    }
+  }
+
+  async getReceivedMeetingsByUser(userId: number): Promise<MeetingResponseDto[]> {
+    try {
+      return this.meetings.find({
+        where: { recipient: { id: userId } },
+        relations: ['reporter'],
+        order: { createdAt: 'DESC' },
+      })
+    } catch (e) {
+      console.error(e)
+      throw e
+    }
+  }
+
+  async getWaitingNumber(recipientId: number, meetingId: number) {
+    const now = new Date()
+    const startOfToday = startOfDay(now)
+    const endOfToday = endOfDay(now)
+
+    return this.meetings.count({
+      where: {
+        recipient: { id: recipientId },
+        createdAt: Between(startOfToday, endOfToday),
+        status: MeetingStatus.PENDING,
+        id: LessThanOrEqual(meetingId),
+      },
+    })
+  }
+
   async createMeeting(
     reporterId: number,
     recipientId: number,
@@ -48,7 +98,7 @@ export class MeetingService {
           createdAt: Between(startOfToday, endOfToday),
           reporter: { id: reporterId },
           recipient: { id: recipientId },
-          status: Not(MeetingStatus.ACCEPTED),
+          status: MeetingStatus.PENDING,
         },
       })
 
