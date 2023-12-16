@@ -54,8 +54,8 @@ export const EMAIL_GROUP_MAP = {
   'hddfs.com': UserGroup.HYUNDAI_DFS,
 }
 
-export enum ReportStatus {
+export enum MeetingStatus {
   PENDING = 'PENDING',
-  IN_PROGRESS = 'IN_PROGRESS',
-  COMPLETED = 'COMPLETED',
+  ACCEPTED = 'ACCEPTED',
+  REFUSED = 'REFUSED',
 }

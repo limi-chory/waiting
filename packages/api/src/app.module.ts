@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { Modules } from '@module'
-import { Report, Verification, User } from '@entity'
+import { Meeting, Verification, User } from '@entity'
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { Report, Verification, User } from '@entity'
       password: 'waiting',
       database: 'waiting',
       synchronize: true,
-      entities: [Report, Verification, User],
+      entities: [Meeting, Verification, User],
     }),
     ...Modules,
   ],

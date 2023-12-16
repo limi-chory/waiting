@@ -3,13 +3,13 @@ import { EmailModule } from './email'
 import { MeModule } from './me'
 import { TeamModule } from './team'
 import { UserModule } from './user'
-import { ReportModule } from './report'
+import { MeetingModule } from './meeting'
 
 export * from './auth'
 export * from './user'
-export * from './report'
+export * from './meeting'
 export * from './email'
 export * from './me'
 export * from './team'
 
-export const Modules = [AuthModule, EmailModule, UserModule, MeModule, TeamModule, ReportModule]
+export const Modules = [AuthModule, EmailModule, UserModule, MeModule, TeamModule, MeetingModule]
