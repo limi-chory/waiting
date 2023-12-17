@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Put, Delete, Param, UseGuards, Body, Patch } from '@nestjs/common'
-import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 import { ApiOperation, AuthUser } from '@decorators'
 import { User } from '@entity'
-import { MeetingRequestDto, MeetingStatusRequestDto } from '@dto'
+import { MeetingRequestDto, MeetingResponseDto, MeetingStatusRequestDto } from '@dto'
 
 import { MeetingService } from './meeting.service'
 import { JwtAuthGuard } from '../auth/jwt.auth.guard'
@@ -30,6 +30,7 @@ export class MeetingController {
   }
 
   @Get('/:id')
+  @ApiResponse({ status: 200, type: MeetingResponseDto, description: '미팅 정보 조회 완료' })
   @ApiOperation({ description: 'Meeting 조회' })
   getMeeting(@Param('id') id: number) {
     return this.meetingService.getMeetingById(id)

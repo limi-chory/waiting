@@ -54,6 +54,33 @@ export interface UpdateUserDto {
   teams: string[]
 }
 
+export type User = object
+
+export enum MeetingStatus {
+  PENDING = 'PENDING',
+  ACCEPTED = 'ACCEPTED',
+  REFUSED = 'REFUSED',
+}
+
+export interface MeetingResponseDto {
+  id: number
+  /** @format date-time */
+  createdAt: string
+  reporter: User
+  recipient: User
+  content: string
+  myWaitingNumber: number
+  status: MeetingStatus
+}
+
+export interface MeetingRequestDto {
+  content: string
+}
+
+export interface MeetingStatusRequestDto {
+  status: MeetingStatus
+}
+
 export type QueryParamsType = Record<string | number, any>
 export type ResponseFormat = keyof Omit<Body, 'body' | 'bodyUsed'>
 
@@ -138,7 +165,9 @@ export class HttpClient<SecurityDataType = unknown> {
   protected toQueryString(rawQuery?: QueryParamsType): string {
     const query = rawQuery || {}
     const keys = Object.keys(query).filter((key) => 'undefined' !== typeof query[key])
-    return keys.map((key) => (Array.isArray(query[key]) ? this.addArrayQueryParam(query, key) : this.addQueryParam(query, key))).join('&')
+    return keys
+      .map((key) => (Array.isArray(query[key]) ? this.addArrayQueryParam(query, key) : this.addQueryParam(query, key)))
+      .join('&')
   }
 
   protected addQueryParams(rawQuery?: QueryParamsType): string {
@@ -147,12 +176,20 @@ export class HttpClient<SecurityDataType = unknown> {
   }
 
   private contentFormatters: Record<ContentType, (input: any) => any> = {
-    [ContentType.Json]: (input: any) => (input !== null && (typeof input === 'object' || typeof input === 'string') ? JSON.stringify(input) : input),
+    [ContentType.Json]: (input: any) =>
+      input !== null && (typeof input === 'object' || typeof input === 'string') ? JSON.stringify(input) : input,
     [ContentType.Text]: (input: any) => (input !== null && typeof input !== 'string' ? JSON.stringify(input) : input),
     [ContentType.FormData]: (input: any) =>
       Object.keys(input || {}).reduce((formData, key) => {
         const property = input[key]
-        formData.append(key, property instanceof Blob ? property : typeof property === 'object' && property !== null ? JSON.stringify(property) : `${property}`)
+        formData.append(
+          key,
+          property instanceof Blob
+            ? property
+            : typeof property === 'object' && property !== null
+            ? JSON.stringify(property)
+            : `${property}`,
+        )
         return formData
       }, new FormData()),
     [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
@@ -206,7 +243,10 @@ export class HttpClient<SecurityDataType = unknown> {
     ...params
   }: FullRequestParams): Promise<HttpResponse<T, E>> => {
     const secureParams =
-      ((typeof secure === 'boolean' ? secure : this.baseApiParams.secure) && this.securityWorker && (await this.securityWorker(this.securityData))) || {}
+      ((typeof secure === 'boolean' ? secure : this.baseApiParams.secure) &&
+        this.securityWorker &&
+        (await this.securityWorker(this.securityData))) ||
+      {}
     const requestParams = this.mergeRequestParams(params, secureParams)
     const queryString = query && this.toQueryString(query)
     const payloadFormatter = this.contentFormatters[type || ContentType.Json]
@@ -390,60 +430,121 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
   }
-  reports = {
+  meetings = {
     /**
-     * @description Report 리스트 조회
+     * @description 보낸 Meeting 리스트 조회
      *
-     * @tags reports
-     * @name ReadReports
-     * @request GET:/reports/{id}
+     * @tags meetings
+     * @name GetSentMeetings
+     * @request GET:/meetings/sent
+     * @secure
      */
-    readReports: (id: string, params: RequestParams = {}) =>
+    getSentMeetings: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/reports/${id}`,
+        path: `/meetings/sent`,
         method: 'GET',
+        secure: true,
         ...params,
       }),
 
     /**
-     * @description Report 생성
+     * @description 받은 Meeting 리스트 조회
      *
-     * @tags reports
-     * @name CreateReport
-     * @request POST:/reports/{id}
+     * @tags meetings
+     * @name GetReceivedMeetings
+     * @request GET:/meetings/received
+     * @secure
      */
-    createReport: (id: string, params: RequestParams = {}) =>
+    getReceivedMeetings: (params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/reports/${id}`,
-        method: 'POST',
+        path: `/meetings/received`,
+        method: 'GET',
+        secure: true,
         ...params,
       }),
 
     /**
-     * @description Report 수정
+     * @description Meeting 조회
      *
-     * @tags reports
-     * @name UpdateReport
-     * @request PUT:/reports/{id}
+     * @tags meetings
+     * @name GetMeeting
+     * @request GET:/meetings/{id}
      */
-    updateReport: (id: string, params: RequestParams = {}) =>
+    getMeeting: (id: number, params: RequestParams = {}) =>
+      this.request<MeetingResponseDto, any>({
+        path: `/meetings/${id}`,
+        method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * @description Meeting 수정
+     *
+     * @tags meetings
+     * @name UpdateMeeting
+     * @request PUT:/meetings/{id}
+     * @secure
+     */
+    updateMeeting: (id: number, data: MeetingRequestDto, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/reports/${id}`,
+        path: `/meetings/${id}`,
         method: 'PUT',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
 
     /**
-     * @description Report 삭제
+     * @description Meeting 삭제
      *
-     * @tags reports
-     * @name DeleteReport
-     * @request DELETE:/reports/{id}
+     * @tags meetings
+     * @name DeleteMeeting
+     * @request DELETE:/meetings/{id}
+     * @secure
      */
-    deleteReport: (id: string, params: RequestParams = {}) =>
+    deleteMeeting: (id: number, params: RequestParams = {}) =>
       this.request<void, any>({
-        path: `/reports/${id}`,
+        path: `/meetings/${id}`,
         method: 'DELETE',
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * @description Meeting 상태 변경
+     *
+     * @tags meetings
+     * @name UpdateMeetingStatus
+     * @request PATCH:/meetings/{id}
+     * @secure
+     */
+    updateMeetingStatus: (id: number, data: MeetingStatusRequestDto, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/meetings/${id}`,
+        method: 'PATCH',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description Meeting 생성
+     *
+     * @tags meetings
+     * @name CreateMeeting
+     * @request POST:/meetings/{recipientId}
+     * @secure
+     */
+    createMeeting: (recipientId: number, data: MeetingRequestDto, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/meetings/${recipientId}`,
+        method: 'POST',
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
   }

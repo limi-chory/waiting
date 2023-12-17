@@ -3,26 +3,21 @@ import { useEffect, useState } from 'react'
 
 import styles from '@style/Home.module.css'
 
-import SettingsIcon from '@icon/settings.svg'
-
 import { useLoginContext } from '@context'
 import { ROUTES } from '@util'
-import { Menu, ModalPopup, MySettings } from '@component'
+import { Header, Teammates } from '@component'
 import { useAxios } from '@hook'
-import { UserResponseDto } from '@api-type'
 
 const Home: React.FC = () => {
   const { me, isLoggedIn } = useLoginContext()
   const router = useRouter()
   const { api } = useAxios()
-
-  const [isSettingOpen, setIsSettingOpen] = useState<boolean>(false)
-  const [teamMates, setTeamMates] = useState<any>({})
+  const [teammates, setTeammates] = useState<any>({})
 
   const fetchTeammates = async () => {
     try {
       const response = (await api.teams.getTeammates()) as any
-      setTeamMates(response.data)
+      setTeammates(response.data)
     } catch (e) {
       console.error(e)
     }
@@ -34,43 +29,14 @@ const Home: React.FC = () => {
   }, [me])
 
   useEffect(() => {
-    if (!isLoggedIn) router.push(ROUTES.login)
+    if (!isLoggedIn) router.push(ROUTES.Login)
   }, [isLoggedIn, router])
 
   return (
     <>
-      <header className={styles.header}>
-        <Menu />
-        <div className={styles.logo}>Waiting</div>
-        <div className={styles.settings} onClick={() => setIsSettingOpen(true)}>
-          <SettingsIcon />
-        </div>
-      </header>
+      <Header title="메인" />
       <div className={styles.container}>
-        <ModalPopup isOpen={isSettingOpen} onClose={() => setIsSettingOpen(false)}>
-          <MySettings onClose={() => setIsSettingOpen(false)} />
-        </ModalPopup>
-        {Object.entries(teamMates)?.map(([teamName, teammates]) => {
-          return (
-            <div key={teamName} className={styles.listContainer}>
-              {teamName}
-              <div className={styles.list}>
-                {(teammates as UserResponseDto[])?.map((user) => (
-                  <div key={user.id} className={styles.listItem}>
-                    <div>{user.name}</div>
-                    <div>{user.email}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )
-        })}
-        {!Object.keys(teamMates).length && (
-          <>
-            <div className={styles.listContainer}>소속된 팀이 없습니다.</div>
-            <div className={styles.listContainer}>내 설정에서 팀 설정을 해주세요.</div>
-          </>
-        )}
+        <Teammates teammates={teammates} />
       </div>
     </>
   )

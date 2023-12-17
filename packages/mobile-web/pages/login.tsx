@@ -15,7 +15,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('')
   const [loginFail, setLoginFail] = useState<boolean>(false)
 
-  if (isLoggedIn) router.push(ROUTES.home)
+  if (isLoggedIn) router.push(ROUTES.Main)
 
   const handleLogin = async () => {
     try {
@@ -24,7 +24,7 @@ const Login: React.FC = () => {
 
       if (token) {
         setLoginTokenCookie?.(token, new Date(expires))
-        router.push(ROUTES.home)
+        router.push(ROUTES.Main)
       }
     } catch (e: any) {
       if (e.error.statusCode === 401) {

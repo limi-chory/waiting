@@ -17,13 +17,11 @@ const Temp: React.FC = () => {
         <div className={styles.settings} onClick={() => setIsSettingOpen(true)}>
           <SettingsIcon />
         </div>
-      </header>
-      <div>
         <ModalPopup isOpen={isSettingOpen} onClose={() => setIsSettingOpen(false)}>
           <MySettings onClose={() => setIsSettingOpen(false)} />
         </ModalPopup>
-        임시 페이지
-      </div>
+      </header>
+      <div>임시 페이지</div>
     </>
   )
 }

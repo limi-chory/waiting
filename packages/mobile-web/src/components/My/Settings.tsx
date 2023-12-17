@@ -72,7 +72,12 @@ export const MySettings = ({ onClose }: MySettingsProps) => {
       </div>
       <div className={styles['form-group']}>
         <label>이름</label>
-        <input type="text" value={editedName} onChange={(e) => setEditedName(e.target.value)} className={styles.input} />
+        <input
+          type="text"
+          value={editedName}
+          onChange={(e) => setEditedName(e.target.value)}
+          className={styles.input}
+        />
       </div>
       <div className={styles['toggle-group']}>
         <label>보고받기 :</label>

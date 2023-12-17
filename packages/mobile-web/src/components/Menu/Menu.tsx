@@ -17,17 +17,18 @@ export const Menu = () => {
     setMenuOpen(!menuOpen)
   }
 
-  const handleClickMenu1 = () => {
-    router.push(ROUTES.home)
-  }
-
-  const handleClickMenu2 = () => {
-    router.push(ROUTES.temp)
+  const handleMenuClick = (route: string) => {
+    if (router.pathname === route) toggleMenu()
+    else router.push(route)
   }
 
   return (
     <div className={styles.menuContainer}>
-      <div className={styles.overlay} onClick={toggleMenu} style={{ display: menuOpen ? 'block' : 'none' }} />
+      <div
+        className={styles.overlay}
+        onClick={() => menuOpen && toggleMenu()}
+        style={{ display: menuOpen ? 'block' : 'none' }}
+      />
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -40,14 +41,14 @@ export const Menu = () => {
             <button className={styles.closeButton} onClick={toggleMenu}>
               <CloseIcon width={24} height={24} fill={'#282828'} />
             </button>
-            <p className={styles.menuItem} onClick={handleClickMenu1}>
-              Menu Item 1
+            <p className={styles.menuItem} onClick={() => handleMenuClick(ROUTES.Main)}>
+              메인
             </p>
-            <p className={styles.menuItem} onClick={handleClickMenu2}>
-              Menu Item 2
+            <p className={styles.menuItem} onClick={() => handleMenuClick(ROUTES.SentMeeting)}>
+              보낸 미팅
             </p>
-            <p className={styles.menuItem} onClick={handleClickMenu2}>
-              Menu Item 3
+            <p className={styles.menuItem} onClick={() => handleMenuClick(ROUTES.ReceivedMeeting)}>
+              받은 미팅
             </p>
           </motion.div>
         )}
