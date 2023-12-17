@@ -17,7 +17,7 @@ export class AuthController {
   @Post('/email-verification/:email')
   @ApiOperation({ description: '이메일 인증코드 전송' })
   sendVerifyEmail(@Param('email') to: string) {
-    return this.emailService.sendEmail(to)
+    return this.emailService.sendVerificationEmail(to)
   }
 
   @Get('/email-verification/:email/:code')

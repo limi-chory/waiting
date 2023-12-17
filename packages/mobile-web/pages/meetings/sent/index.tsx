@@ -88,7 +88,7 @@ const SentMeetings: React.FC = () => {
   }, [me])
 
   useEffect(() => {
-    if (!isLoggedIn) router.push(ROUTES.Login)
+    if (!isLoggedIn) router.replace(ROUTES.Login)
   }, [isLoggedIn, router])
 
   return (

@@ -11,14 +11,17 @@ import { startOfDay, endOfDay, isToday } from 'date-fns'
 
 import { Meeting, MeetingStatus, UserRole } from '@entity'
 import { MeetingRequestDto, MeetingResponseDto, MeetingStatusRequestDto } from '@dto'
+import { getDateForEmailNotification } from '@util'
 
 import { UserService } from '../user'
+import { NotificationService } from '../notification'
 
 @Injectable()
 export class MeetingService {
   constructor(
     @InjectRepository(Meeting) private readonly meetings: Repository<Meeting>,
     private readonly userService: UserService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   getHello(): string {
@@ -110,7 +113,15 @@ export class MeetingService {
       if (!reporter || !recipient) throw new NotFoundException()
       if (recipient.role !== UserRole.RECIPIENT) throw new BadRequestException()
 
-      return this.meetings.save(this.meetings.create({ reporter, recipient, content }))
+      const meeting = await this.meetings.save(this.meetings.create({ reporter, recipient, content }))
+
+      this.notificationService.sendReceivedMeetingEmail(
+        recipient.email,
+        getDateForEmailNotification(meeting.createdAt),
+        reporter.name,
+      )
+
+      return meeting
     } catch (e) {
       console.error(e)
       throw e
@@ -166,7 +177,16 @@ export class MeetingService {
 
       meeting.status = status
 
-      return this.meetings.save(meeting)
+      const updatedMeeting = this.meetings.save(meeting)
+
+      this.notificationService.sendMeetingStatusUpdateEmail(
+        status,
+        meeting.reporter.email,
+        getDateForEmailNotification(new Date()),
+        meeting.recipient.name,
+      )
+
+      return updatedMeeting
     } catch (e) {
       console.error(e)
       throw e

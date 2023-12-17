@@ -46,7 +46,7 @@ export class EmailService {
     await this.verifications.remove(verification)
   }
 
-  async sendEmail(email: string): Promise<boolean> {
+  async sendVerificationEmail(email: string): Promise<boolean> {
     let verifyCode
     const prevVerification = await this.findVerification(email)
 

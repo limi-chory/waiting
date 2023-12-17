@@ -13,7 +13,8 @@ const Login: React.FC = () => {
   const { api } = useAxios()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [loginFail, setLoginFail] = useState<boolean>(false)
+  const [isNotExistEmail, setIsNotExistEmail] = useState<boolean>(false)
+  const [isIncorrectPassword, setIsIncorrectPassword] = useState<boolean>(false)
 
   if (isLoggedIn) router.push(ROUTES.Main)
 
@@ -29,7 +30,12 @@ const Login: React.FC = () => {
     } catch (e: any) {
       if (e.error.statusCode === 401) {
         setPassword('')
-        setLoginFail(true)
+        setIsIncorrectPassword(true)
+      }
+      if (e.error.statusCode === 404) {
+        setEmail('')
+        setPassword('')
+        setIsNotExistEmail(true)
       }
       console.error(e)
     }
@@ -41,7 +47,15 @@ const Login: React.FC = () => {
       <form>
         <div className={styles['form-group']}>
           <label htmlFor="email">이메일</label>
-          <input type="text" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input
+            type="text"
+            id="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              setIsNotExistEmail(false)
+            }}
+          />
         </div>
         <div className={styles['form-group']}>
           <label htmlFor="password">비밀번호</label>
@@ -49,13 +63,17 @@ const Login: React.FC = () => {
             type="password"
             id="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value)
+              setIsIncorrectPassword(false)
+            }}
             onKeyUp={(e) => {
               if (e.key === 'Enter') handleLogin()
             }}
           />
         </div>
-        {loginFail && <p className={styles['error-message']}>아이디 또는 비밀번호를 잘못 입력했습니다.</p>}
+        {isIncorrectPassword && <p className={styles['error-message']}>비밀번호를 잘못 입력했습니다.</p>}
+        {isNotExistEmail && <p className={styles['error-message']}>존재하지 않는 이메일 입니다.</p>}
         <div className={styles['form-group']}>
           <button type="button" className={styles['login-button']} onClick={handleLogin}>
             Login
