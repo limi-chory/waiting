@@ -9,7 +9,7 @@ import { useLoginContext } from '@context'
 import { ROUTES, getFormattedDate } from '@util'
 import { MeetingResponseDto, MeetingStatus } from '@api-type'
 
-import { MeetingStatusLabel } from '../consts'
+import { MeetingStatusLabel } from '../../../src/utils/consts'
 
 const SentMeetings: React.FC = () => {
   const { me, isLoggedIn } = useLoginContext()
