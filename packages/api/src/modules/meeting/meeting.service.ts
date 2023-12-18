@@ -11,7 +11,7 @@ import { startOfDay, endOfDay, isToday } from 'date-fns'
 
 import { Meeting, MeetingStatus, UserRole } from '@entity'
 import { MeetingRequestDto, MeetingResponseDto, MeetingStatusRequestDto } from '@dto'
-import { getDateForEmailNotification } from '@util'
+import { getDateForEmailNotification, getKoreanTime } from '@util'
 
 import { UserService } from '../user'
 import { NotificationService } from '../notification'
@@ -117,7 +117,7 @@ export class MeetingService {
 
       this.notificationService.sendReceivedMeetingEmail(
         recipient.email,
-        getDateForEmailNotification(now),
+        getDateForEmailNotification(getKoreanTime()),
         reporter.name,
       )
 
@@ -182,7 +182,7 @@ export class MeetingService {
       this.notificationService.sendMeetingStatusUpdateEmail(
         status,
         meeting.reporter.email,
-        getDateForEmailNotification(new Date()),
+        getDateForEmailNotification(getKoreanTime()),
         meeting.recipient.name,
       )
 
