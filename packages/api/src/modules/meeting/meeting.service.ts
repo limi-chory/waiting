@@ -117,7 +117,7 @@ export class MeetingService {
 
       this.notificationService.sendReceivedMeetingEmail(
         recipient.email,
-        getDateForEmailNotification(meeting.createdAt),
+        getDateForEmailNotification(now),
         reporter.name,
       )
 
