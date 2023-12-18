@@ -9,6 +9,10 @@
  * ---------------------------------------------------------------
  */
 
+export interface VerificationEmailDto {
+  isFind: boolean
+}
+
 export interface LoginDto {
   /** 이메일 주소 */
   email: string
@@ -52,6 +56,13 @@ export interface UpdateUserDto {
   role: UserRole
   /** 팀 */
   teams: string[]
+}
+
+export interface ResetPasswordDto {
+  /** 이메일 주소 */
+  email: string
+  /** 비밀번호 */
+  password: string
 }
 
 export type User = object
@@ -307,10 +318,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name SendVerifyEmail
      * @request POST:/auth/email-verification/{email}
      */
-    sendVerifyEmail: (email: string, params: RequestParams = {}) =>
+    sendVerifyEmail: (email: string, data: VerificationEmailDto, params: RequestParams = {}) =>
       this.request<void, any>({
         path: `/auth/email-verification/${email}`,
         method: 'POST',
+        body: data,
+        type: ContentType.Json,
         ...params,
       }),
 
@@ -376,6 +389,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: 'PATCH',
         body: data,
         secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * @description 비밀번호 변경
+     *
+     * @tags users
+     * @name ResetPassword
+     * @request PATCH:/users/reset/password
+     */
+    resetPassword: (data: ResetPasswordDto, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/users/reset/password`,
+        method: 'PATCH',
+        body: data,
         type: ContentType.Json,
         ...params,
       }),

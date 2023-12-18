@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Post, Request, UnauthorizedException, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Request, UnauthorizedException, UseGuards } from '@nestjs/common'
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
 
-import { LoginDto } from '@dto'
+import { LoginDto, VerificationEmailDto } from '@dto'
 import { ApiOperation } from '@decorators'
 
 import { EmailService } from '../email/email.service'
@@ -16,8 +16,9 @@ export class AuthController {
 
   @Post('/email-verification/:email')
   @ApiOperation({ description: '이메일 인증코드 전송' })
-  sendVerifyEmail(@Param('email') to: string) {
-    return this.emailService.sendVerificationEmail(to)
+  @ApiBody({ type: VerificationEmailDto })
+  sendVerifyEmail(@Param('email') to: string, @Body() verificationEmailDto: VerificationEmailDto) {
+    return this.emailService.sendVerificationEmail(to, verificationEmailDto.isFind)
   }
 
   @Get('/email-verification/:email/:code')

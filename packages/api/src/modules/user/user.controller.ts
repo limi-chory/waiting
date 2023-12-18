@@ -1,7 +1,7 @@
 import { Body, Controller, Patch, Post, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger'
 
-import { CreateUserDto, UpdateUserDto, UserResponseDto } from '@dto'
+import { CreateUserDto, ResetPasswordDto, UpdateUserDto, UserResponseDto } from '@dto'
 import { User } from '@entity'
 import { ApiOperation, AuthUser } from '@decorators'
 
@@ -32,5 +32,12 @@ export class UserController {
   @ApiBody({ type: UpdateUserDto, description: '회원 수정 정보 입력' })
   async updateUser(@AuthUser() user: User, @Body() updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
     return this.userService.updateUser(user.id, updateUserDto)
+  }
+
+  @Patch('/reset/password')
+  @ApiOperation({ description: '비밀번호 변경' })
+  @ApiBody({ type: ResetPasswordDto, description: '비밀번호 변경 정보 입력' })
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.userService.resetPassword(resetPasswordDto)
   }
 }

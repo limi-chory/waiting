@@ -43,7 +43,7 @@ const Login: React.FC = () => {
 
   return (
     <div className={styles['login-container']}>
-      <h1>Login</h1>
+      <h1>로그인</h1>
       <form>
         <div className={styles['form-group']}>
           <label htmlFor="email">이메일</label>
@@ -74,15 +74,18 @@ const Login: React.FC = () => {
         </div>
         {isIncorrectPassword && <p className={styles['error-message']}>비밀번호를 잘못 입력했습니다.</p>}
         {isNotExistEmail && <p className={styles['error-message']}>존재하지 않는 이메일 입니다.</p>}
-        <div className={styles['form-group']}>
-          <button type="button" className={styles['login-button']} onClick={handleLogin}>
-            Login
-          </button>
-          <button type="button" className={styles['signup-button']} onClick={() => router.push('/signup')}>
-            Sign Up
-          </button>
-        </div>
       </form>
+      <div className={styles['form-group']}>
+        <button type="button" className={styles['login-button']} onClick={handleLogin}>
+          로그인
+        </button>
+        <button type="button" className={styles['signup-button']} onClick={() => router.push(ROUTES.Signup)}>
+          회원가입
+        </button>
+        <div className={styles['find-password']} onClick={() => router.push(ROUTES.FindPassword)}>
+          비밀번호 찾기
+        </div>
+      </div>
     </div>
   )
 }

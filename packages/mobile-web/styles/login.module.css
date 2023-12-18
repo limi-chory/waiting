@@ -82,3 +82,12 @@
   font-size: 14px;
   margin-top: 5px;
 }
+
+.find-password {
+  position: relative;
+  text-align: center;
+  padding-top: 4px;
+  margin-top: 12px;
+  font-size: 14px;
+  text-decoration: underline;
+}

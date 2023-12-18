@@ -75,3 +75,20 @@ export class UserResponseDto {
   @IsEnum(UserRole)
   role: UserRole
 }
+
+export class VerificationEmailDto {
+  @ApiProperty()
+  isFind?: boolean
+}
+
+export class ResetPasswordDto {
+  @IsNotEmpty()
+  @IsEmail()
+  @ApiProperty({ description: '이메일 주소' })
+  email: string
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({ description: '비밀번호' })
+  password: string
+}

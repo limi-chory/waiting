@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { GroupTeamMap, User, UserTeam } from '@entity'
-import { CreateUserDto, UpdateUserDto, UserResponseDto } from '@dto'
+import { CreateUserDto, ResetPasswordDto, UpdateUserDto, UserResponseDto } from '@dto'
 import { addLabelsToUser } from '@util'
 
 @Injectable()
@@ -40,6 +40,23 @@ export class UserService {
       if (name) user.name = name
       if (role) user.role = role
       if (teams) user.teams = teams as UserTeam[]
+
+      const result = await this.users.save(user)
+
+      return addLabelsToUser(result)
+    } catch (e) {
+      console.error(e)
+      throw e
+    }
+  }
+
+  async resetPassword({ email, password }: ResetPasswordDto): Promise<UserResponseDto> {
+    try {
+      const user = await this.getUserByEmail(email)
+
+      if (!user) throw new NotFoundException()
+
+      user.password = password
 
       const result = await this.users.save(user)
 

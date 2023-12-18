@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import * as nodemailer from 'nodemailer'
 import { Repository } from 'typeorm'
@@ -6,12 +6,16 @@ import { Repository } from 'typeorm'
 import { Verification } from '@entity'
 
 import { VERIFICATION_EMAIL_HTML, VERIFICATION_EMAIL_SUBJECT } from './consts'
+import { UserService } from '../user'
 
 @Injectable()
 export class EmailService {
   private transporter
 
-  constructor(@InjectRepository(Verification) private readonly verifications: Repository<Verification>) {
+  constructor(
+    @InjectRepository(Verification) private readonly verifications: Repository<Verification>,
+    private readonly userService: UserService,
+  ) {
     // 이메일 계정 정보
     const emailConfig = {
       service: 'gmail',
@@ -46,7 +50,12 @@ export class EmailService {
     await this.verifications.remove(verification)
   }
 
-  async sendVerificationEmail(email: string): Promise<boolean> {
+  async sendVerificationEmail(email: string, isFind?: boolean): Promise<boolean> {
+    if (isFind) {
+      const user = await this.userService.getUserByEmail(email, false)
+      if (!user) throw new NotFoundException()
+    }
+
     let verifyCode
     const prevVerification = await this.findVerification(email)
 
