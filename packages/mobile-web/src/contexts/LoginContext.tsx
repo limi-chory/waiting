@@ -53,6 +53,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     fetchMe()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginToken])
 
   const setLoginTokenCookie = (token: string, expires: Date) => {
@@ -67,7 +68,11 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     router.push('/')
   }
 
-  return <LoginContext.Provider value={{ me, loginToken, isLoggedIn, refetch: fetchMe, setLoginTokenCookie, logout }}>{children}</LoginContext.Provider>
+  return (
+    <LoginContext.Provider value={{ me, loginToken, isLoggedIn, refetch: fetchMe, setLoginTokenCookie, logout }}>
+      {children}
+    </LoginContext.Provider>
+  )
 }
 
 export const useLoginContext = () => useContext(LoginContext)
